@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Recipe Finder & Meal Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+    <link href="https://fonts.cdnfonts.com/css/neue-world" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-['Inter']">
+    <!-- Simple navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap sm:flex-nowrap justify-between items-center h-16 gap-4">
+                <!-- Logo Section -->
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <img class="h-8 w-auto" src="img/logo.jpg" alt="Recipe Finder"/>
+                        <span class="ml-2 text-xl font-semibold text-gray-900 logo-text">Recipe Finder</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <button class="add-recipe-btn !rounded-button bg-custom/10 text-custom px-4 py-2 text-sm font-medium">
+                        <i class="fas fa-plus mr-2"></i>Add Recipe
+                    </button>
+                    <button class="sign-in-btn !rounded-button bg-custom text-white px-4 py-2 text-sm font-medium">Sign In</button>
+                    <button class="register-btn nav-btn bg-custom text-white">
+                        <i class="fas fa-user-plus mr-2"></i>Register
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden mobile-menu-btn">
+                    <i class="fas fa-bars text-gray-600"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu hidden md:hidden py-4 border-t border-gray-100">
+                <div class="flex flex-col space-y-3">
+                    <button class="add-recipe-btn mobile-nav-btn">
+                        <i class="fas fa-plus mr-2"></i>Add Recipe
+                    </button>
+                    <button class="sign-in-btn mobile-nav-btn">
+                        <i class="fas fa-user mr-2"></i>Sign In
+                    </button>
+                    <button class="register-btn mobile-nav-btn bg-custom text-white">
+                        <i class="fas fa-user-plus mr-2"></i>Register
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search bar -->
+        <div class="mb-8">
+            <div class="max-w-3xl mx-auto w-full px-4 sm:px-0">
+                <div class="relative">
+                    <input type="text" placeholder="Search for recipes..." class="w-full h-12 pl-12 pr-4 rounded-lg border border-gray-300 focus:ring-custom focus:border-custom"/>
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <div class="search-results absolute w-full bg-white mt-2 rounded-lg shadow-lg hidden">
+                        <!-- Search results will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category filters -->
+        <div class="mb-8 overflow-x-auto category-container">
+            <div class="flex flex-wrap gap-2 sm:gap-4 pb-2">
+                <button class="filter-btn !rounded-button bg-custom/10 text-custom px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="all">
+                    <i class="fas fa-utensils mr-2"></i>All Recipes
+                </button>
+                <button class="filter-btn !rounded-button bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="vegetarian">
+                    <i class="fas fa-leaf mr-2"></i>Vegetarian
+                </button>
+                <button class="filter-btn !rounded-button bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="gluten-free">
+                    <i class="fas fa-wheat-awn-circle-exclamation mr-2"></i>Gluten Free
+                </button>
+                <button class="filter-btn !rounded-button bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="quick-meals">
+                    <i class="fas fa-clock mr-2"></i>Quick Meals
+                </button>
+                <button class="filter-btn !rounded-button bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="low-carb">
+                    <i class="fas fa-heart-pulse mr-2"></i>Low Carb
+                </button>
+                <button class="filter-btn !rounded-button bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="vegan">
+                    <i class="fas fa-seedling mr-2"></i>Vegan
+                </button>
+                <button class="filter-btn !rounded-button bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="spicy">
+                    <i class="fas fa-pepper-hot mr-2"></i>Spicy
+                </button>
+                <button class="filter-btn !rounded-button bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="seafood">
+                    <i class="fas fa-fish mr-2"></i>Seafood
+                </button>
+                <button class="filter-btn !rounded-button bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="breakfast">
+                    <i class="fas fa-egg mr-2"></i>Breakfast
+                </button>
+                <button class="filter-btn !rounded-button bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium whitespace-nowrap" data-category="desserts">
+                    <i class="fas fa-ice-cream mr-2"></i>Desserts
+                </button>
+            </div>
+        </div>
+
+        <!-- Recipe grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 mb-8">
+            <!-- Recipe Card 1 -->
+            <div class="recipe-card bg-white rounded-lg shadow-sm overflow-hidden" data-recipe-id="1" data-categories="vegetarian,quick-meals">
+                <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" class="w-full h-48 object-cover" alt="Mediterranean Salad"/>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Mediterranean Salad</h3>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-clock mr-2"></i>15 mins
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-fire mr-2"></i>320 cal
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="!rounded-button bg-custom/10 text-custom px-3 py-1.5 text-sm font-medium">
+                            <i class="fas fa-plus mr-2"></i>Add to Plan
+                        </button>
+                        <button class="favorite-btn text-gray-400 hover:text-custom">
+                            <i class="fas fa-heart text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 2 -->
+            <div class="recipe-card bg-white rounded-lg shadow-sm overflow-hidden" data-recipe-id="2" data-categories="low-carb,quick-meals">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836" class="w-full h-48 object-cover" alt="Grilled Chicken"/>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Grilled Chicken & Vegetables</h3>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-clock mr-2"></i>30 mins
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-fire mr-2"></i>450 cal
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="!rounded-button bg-custom/10 text-custom px-3 py-1.5 text-sm font-medium">
+                            <i class="fas fa-plus mr-2"></i>Add to Plan
+                        </button>
+                        <button class="favorite-btn text-gray-400 hover:text-custom">
+                            <i class="fas fa-heart text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 3 -->
+            <div class="recipe-card bg-white rounded-lg shadow-sm overflow-hidden" data-recipe-id="3">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd" class="w-full h-48 object-cover" alt="Quinoa Bowl"/>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Quinoa Buddha Bowl</h3>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-clock mr-2"></i>20 mins
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-fire mr-2"></i>380 cal
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="!rounded-button bg-custom/10 text-custom px-3 py-1.5 text-sm font-medium">
+                            <i class="fas fa-plus mr-2"></i>Add to Plan
+                        </button>
+                        <button class="favorite-btn text-gray-400 hover:text-custom">
+                            <i class="fas fa-heart text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 4 -->
+            <div class="recipe-card bg-white rounded-lg shadow-sm overflow-hidden" data-recipe-id="4">
+                <img src="https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd" class="w-full h-48 object-cover" alt="Spicy Thai Curry"/>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Spicy Thai Curry</h3>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-clock mr-2"></i>35 mins
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-fire mr-2"></i>420 cal
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="!rounded-button bg-custom/10 text-custom px-3 py-1.5 text-sm font-medium">
+                            <i class="fas fa-plus mr-2"></i>Add to Plan
+                        </button>
+                        <button class="favorite-btn text-gray-400 hover:text-custom">
+                            <i class="fas fa-heart text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 5 -->
+            <div class="recipe-card bg-white rounded-lg shadow-sm overflow-hidden" data-recipe-id="5">
+                <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288" class="w-full h-48 object-cover" alt="Grilled Salmon"/>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Grilled Salmon</h3>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-clock mr-2"></i>25 mins
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-fire mr-2"></i>380 cal
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="!rounded-button bg-custom/10 text-custom px-3 py-1.5 text-sm font-medium">
+                            <i class="fas fa-plus mr-2"></i>Add to Plan
+                        </button>
+                        <button class="favorite-btn text-gray-400 hover:text-custom">
+                            <i class="fas fa-heart text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 6 -->
+            <div class="recipe-card bg-white rounded-lg shadow-sm overflow-hidden" data-recipe-id="6">
+                <img src="https://images.unsplash.com/photo-1541519227354-08fa5d50c44d" class="w-full h-48 object-cover" alt="Avocado Toast"/>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Avocado Toast</h3>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-clock mr-2"></i>10 mins
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-fire mr-2"></i>280 cal
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="!rounded-button bg-custom/10 text-custom px-3 py-1.5 text-sm font-medium">
+                            <i class="fas fa-plus mr-2"></i>Add to Plan
+                        </button>
+                        <button class="favorite-btn text-gray-400 hover:text-custom">
+                            <i class="fas fa-heart text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 7 -->
+            <div class="recipe-card bg-white rounded-lg shadow-sm overflow-hidden" data-recipe-id="7">
+                <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb" class="w-full h-48 object-cover" alt="Chocolate Lava Cake"/>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Chocolate Lava Cake</h3>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-clock mr-2"></i>20 mins
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-fire mr-2"></i>450 cal
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="!rounded-button bg-custom/10 text-custom px-3 py-1.5 text-sm font-medium">
+                            <i class="fas fa-plus mr-2"></i>Add to Plan
+                        </button>
+                        <button class="favorite-btn text-gray-400 hover:text-custom">
+                            <i class="fas fa-heart text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 8 -->
+            <div class="recipe-card bg-white rounded-lg shadow-sm overflow-hidden" data-recipe-id="8">
+                <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601" class="w-full h-48 object-cover" alt="Pasta Primavera"/>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Pasta Primavera</h3>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-clock mr-2"></i>25 mins
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-fire mr-2"></i>400 cal
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="!rounded-button bg-custom/10 text-custom px-3 py-1.5 text-sm font-medium">
+                            <i class="fas fa-plus mr-2"></i>Add to Plan
+                        </button>
+                        <button class="favorite-btn text-gray-400 hover:text-custom">
+                            <i class="fas fa-heart text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal planner -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-semibold text-gray-900">Weekly Meal Planner</h2>
+                <p class="text-gray-600 mt-2">Drag recipes or click "Add to Plan" to organize your weekly meals</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 days-grid">
+                <!-- Days will be dynamically added here -->
+            </div>
+
+            <div class="flex flex-col items-center mt-8">
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button class="clear-all-btn !rounded-button bg-gray-100 text-gray-700 px-6 py-2.5 text-sm font-medium hover:bg-gray-200">
+                        <i class="fas fa-trash mr-2"></i>Clear All
+                    </button>
+                    <button class="generate-list-btn !rounded-button bg-custom text-white px-6 py-2.5 text-sm font-medium hover:bg-custom-dark">
+                        <i class="fas fa-file-export mr-2"></i>Generate Shopping List
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 mt-4">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Tip: You can also drag and drop recipes directly into the meal slots
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-gradient relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-custom/5 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Footer Top -->
+            <div class="pt-16 pb-8">
+                <div class="flex flex-col items-center text-center mb-12">
+                    <div class="flex items-center justify-center mb-6">
+                        <img class="h-10 w-auto" src="img/logo.jpg" alt="Recipe Finder"/>
+                        <span class="ml-3 text-2xl font-bold bg-gradient-to-r from-custom to-purple-600 bg-clip-text text-transparent">
+                            Recipe Finder
+                        </span>
+                    </div>
+                    <p class="text-gray-600 max-w-md mx-auto">
+                        Discover and share delicious recipes, plan your meals, and create unforgettable dining experiences.
+                    </p>
+                </div>
+
+                <!-- Quick Links Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                    <div class="footer-links-group">
+                        <h3 class="footer-heading">Discover</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Popular Recipes</a></li>
+                            <li><a href="#">Latest Recipes</a></li>
+                            <li><a href="#">Seasonal Dishes</a></li>
+                            <li><a href="#">Cooking Tips</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links-group">
+                        <h3 class="footer-heading">Categories</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Breakfast</a></li>
+                            <li><a href="#">Main Course</a></li>
+                            <li><a href="#">Desserts</a></li>
+                            <li><a href="#">Healthy Options</a></li>
+                    </ul>
+                </div>
+
+                    <div class="footer-links-group">
+                        <h3 class="footer-heading">Community</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Share Recipe</a></li>
+                            <li><a href="#">Food Blog</a></li>
+                            <li><a href="#">Community Guidelines</a></li>
+                            <li><a href="#">Help Center</a></li>
+                    </ul>
+                </div>
+
+                    <div class="footer-links-group">
+                        <h3 class="footer-heading">Newsletter</h3>
+                        <p class="text-sm text-gray-600 mb-3">Get weekly recipes and cooking tips!</p>
+                        <form class="newsletter-form">
+                            <div class="relative">
+                                <input 
+                                    type="email" 
+                                    placeholder="Your email address" 
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-white/50 border border-gray-200 focus:border-custom focus:ring-2 focus:ring-custom/20 transition-all duration-300"
+                                >
+                                <i class="fas fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <button type="submit" class="newsletter-submit">
+                                    Subscribe
+                                    <i class="fas fa-arrow-right ml-2"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 py-8 border-t border-gray-200">
+                    <div class="flex items-center space-x-6">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="text-sm text-gray-600">
+                        © 2024 Recipe Finder. All rights reserved.
+                    </div>
+
+                    <div class="flex items-center space-x-6 text-sm">
+                        <a href="#" class="text-gray-600 hover:text-custom transition-colors">Privacy</a>
+                        <a href="#" class="text-gray-600 hover:text-custom transition-colors">Terms</a>
+                        <a href="#" class="text-gray-600 hover:text-custom transition-colors">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="js/recipes.js"></script>
+    <script src="js/dragDrop.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Add Recipe Modal -->
+    <div id="addRecipeModal" class="modal fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="modal-content bg-white rounded-xl p-8 max-w-2xl w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-gray-900">Add New Recipe</h2>
+                <button class="modal-close text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="addRecipeForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Recipe Name</label>
+                        <input type="text" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                        <select required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom">
+                            <option value="">Select Category</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="gluten-free">Gluten Free</option>
+                            <!-- Add other categories -->
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Recipe Image</label>
+                    <input type="file" accept="image/*" required class="w-full">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Ingredients</label>
+                    <textarea rows="3" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Instructions</label>
+                    <textarea rows="4" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom"></textarea>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" class="modal-close px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-2 rounded-lg bg-custom text-white hover:bg-custom-dark">
+                        Add Recipe
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div id="signInModal" class="modal fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="modal-content bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-2">Welcome Back</h2>
+                <p class="text-gray-600">Sign in to your account</p>
+            </div>
+            <form id="signInForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <div class="relative">
+                        <input type="password" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom">
+                        <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 toggle-password">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="rounded border-gray-300 text-custom focus:ring-custom">
+                        <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-custom hover:text-custom-dark">Forgot password?</a>
+                </div>
+                <button type="submit" class="w-full py-2 rounded-lg bg-custom text-white hover:bg-custom-dark">
+                    Sign In
+                </button>
+                <div class="text-center">
+                    <span class="text-sm text-gray-600">Don't have an account? </span>
+                    <button type="button" class="text-sm text-custom hover:text-custom-dark font-medium show-register-modal">
+                        Sign up
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="modal-content bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-2">Create Account</h2>
+                <p class="text-gray-600">Join our community of food lovers</p>
+            </div>
+            <form id="registerForm" class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <input type="text" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <input type="text" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <div class="relative">
+                        <input type="password" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-custom focus:border-custom">
+                        <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 toggle-password">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-2 rounded-lg bg-custom text-white hover:bg-custom-dark">
+                    Create Account
+                </button>
+                <div class="text-center">
+                    <span class="text-sm text-gray-600">Already have an account? </span>
+                    <button type="button" class="text-sm text-custom hover:text-custom-dark font-medium show-signin-modal">
+                        Sign in
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 

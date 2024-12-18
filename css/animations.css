@@ -1,0 +1,67 @@
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.recipe-card {
+    animation: fadeIn 0.5s ease-out;
+    transition: transform 0.2s ease-out;
+}
+
+.recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.meal-slot {
+    transition: all 0.3s ease;
+}
+
+.meal-slot.drag-over {
+    background-color: rgba(var(--custom-rgb), 0.1);
+    border-color: var(--custom-color);
+    transform: scale(1.02);
+}
+
+.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.remove-meal-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.meal-slot-card:hover .remove-meal-btn {
+    opacity: 1;
+}
+
+.favorite-btn {
+    transition: transform 0.2s ease;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.2);
+}
+
+.favorite-btn.active {
+    color: #ff4b4b;
+    animation: pulse 0.3s ease;
+} 
